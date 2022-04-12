@@ -2,6 +2,7 @@ package exchange.rate.controller;
 
 import exchange.rate.dc.ExchangeDc;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,14 +15,11 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("{country}&{amount}")
-    public String calculate(@PathVariable String country, @PathVariable double amount) {
-        ExchangeDc exchangeDto = new ExchangeDc();
-        exchangeDto.setCountry(country);
-        exchangeDto.setAmount(amount);
+    @GetMapping("exchange/{country}/{amount}")
+    public String calculateExchangeRate(@PathVariable String country, @PathVariable double amount, Model model) {
+        ExchangeDc exchangeDc = new ExchangeDc(country, amount);
+        model.addAttribute("exchangeDc", exchangeDc);
 
-        String result = exchangeDto.toString();
-
-        return result;
+        return "ok";
     }
 }

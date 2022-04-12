@@ -22,12 +22,6 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         this.webClient = webClientBuilder.baseUrl(url).build();
     }
 
-
-    @Override
-    public ExchangeResultDc getExchangeRate() {
-        return null;
-    }
-
     @Override
     public ExchangeResultDc getInformation() {
 
