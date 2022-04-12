@@ -4,5 +4,5 @@ import exchange.rate.dc.ExchangeResultDc;
 
 public interface ExchangeRateService {
 
-    ExchangeResultDc getInformation();
+    Double getExchangeRate(String quote);
 }
