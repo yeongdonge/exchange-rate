@@ -22,13 +22,12 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping()
-    public String calculateExchangeRate(@Valid @ModelAttribute ExchangeDc exchangeDc) {
-        String country = exchangeDc.getCountry();
-        double amount = exchangeDc.getAmount();
-        System.out.println("country = " + country);
-        System.out.println("amount = " + amount);
-
-        return "index";
+    @GetMapping("{quote}")
+    public String calculateExchangeRate(@Valid @PathVariable String quote) {
+        Double exchangeRate = exchangeRateService.getExchangeRate(quote);
+        log.info(exchangeRate.toString());
+        return "ok";
     }
+
+    @GetMapping("{quote}")
 }

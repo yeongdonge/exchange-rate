@@ -13,5 +13,5 @@ public class ExchangeResultDc {
     private int timestamp;
     private String source;
 //    private Quote quote;
-    private Map<Quote, Double> quotes;
+    private Map<String, Double> quotes;
 }

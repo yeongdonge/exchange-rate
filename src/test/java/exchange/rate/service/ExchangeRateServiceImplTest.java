@@ -1,17 +1,28 @@
 package exchange.rate.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import exchange.rate.dc.ExchangeResultDc;
+import exchange.rate.eumus.Quote;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class ExchangeRateServiceImplTest {
     /**
@@ -20,8 +31,7 @@ class ExchangeRateServiceImplTest {
      */
     @Test
     @DisplayName("환율 API 호출 테스트")
-    void API_호출() throws Exception
-    {
+    void API_호출() throws Exception {
         //given
         WebClient webClient = WebClient.create("http://api.currencylayer.com");
 
@@ -33,7 +43,7 @@ class ExchangeRateServiceImplTest {
                         "currencies", "KRW")
                 ).retrieve()
                 .bodyToMono(String.class)
-                        .block();
+                .block();
 
         //then
         JSONObject ob = new JSONObject(response);
@@ -46,6 +56,32 @@ class ExchangeRateServiceImplTest {
         assertThat(source).isEqualTo("USD");
         assertThat(quote).isGreaterThan("1200");
     }
-        
+
+    /**
+     * API 호출 테스트 2
+     */
+    @Test
+    @DisplayName("API 호출 테스트 2")
+    void test() throws Exception {
+        WebClient webClient = WebClient.create("http://api.currencylayer.com");
+        String url = "http://api.currencylayer.com/";
+        String accessKey = "85c7c9db50eb0375d0cc55ab69e44908";
+
+        //when
+        String response = webClient.get()
+                .uri(url + "live?access_key={access_key}",
+                        Map.of("access_key", accessKey
+                        ))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ExchangeResultDc exchangeResultDc = objectMapper.readValue(response, ExchangeResultDc.class);
+        System.out.println("exchangeResultDc = " + exchangeResultDc);
+
+    }
+    //then
 
 }

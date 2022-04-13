@@ -4,6 +4,7 @@ import exchange.rate.dc.ExchangeResultDc;
 import exchange.rate.eumus.Quote;
 import exchange.rate.eumus.Source;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +21,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     @Override
     public Double getExchangeRate(String quote) {
         ExchangeResultDc exchangeResultDc = apiHandler.getApi();
-        Quote quoteEnum = Quote.valueOf(quote);
 
-        return exchangeResultDc.getQuotes().get(quoteEnum);
+        return exchangeResultDc.getQuotes().get(quote);
     }
 }

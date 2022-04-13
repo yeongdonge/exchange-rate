@@ -1,11 +1,18 @@
 package exchange.rate.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import exchange.rate.dc.ExchangeResultDc;
 import exchange.rate.eumus.Quote;
 import exchange.rate.eumus.Source;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.json.simple.JSONObject;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +35,26 @@ public class ApiHandlerImpl implements ApiHandler {
     }
 
     @Override
+    @JsonIgnoreProperties(ignoreUnknown = false)
     public ExchangeResultDc getApi() {
-        return webClient.get()
-                .uri("live?access_key={access_key}",
+        ExchangeResultDc exchangeResultDc = null;
+
+        String response = webClient.get()
+                .uri(url + "live?access_key={access_key}",
                         Map.of("access_key", accessKey
                         ))
                 .retrieve()
-                .bodyToMono(ExchangeResultDc.class)
+                .bodyToMono(String.class)
                 .block();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        try {
+            exchangeResultDc = objectMapper.readValue(response, ExchangeResultDc.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return exchangeResultDc;
     }
 }
