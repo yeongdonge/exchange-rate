@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class ExchangeDc {
 
     @NotNull
-    private String country;
+    private String quote;
 
     @Min(value = 0)
     @Max(value = 10000)

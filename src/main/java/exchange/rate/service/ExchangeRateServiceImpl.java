@@ -21,7 +21,13 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     @Override
     public Double getExchangeRate(String quote) {
         ExchangeResultDc exchangeResultDc = apiHandler.getApi();
-
-        return exchangeResultDc.getQuotes().get(quote);
+        String rateQuote = source + quote;
+        Double aDouble = exchangeResultDc.getQuotes().get(rateQuote);
+        return aDouble;
     }
+
+//    @Override
+//    public Double transfer(Double amount) {
+//
+//    }
 }

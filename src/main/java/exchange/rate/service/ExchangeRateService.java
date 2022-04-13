@@ -5,4 +5,6 @@ import exchange.rate.dc.ExchangeResultDc;
 public interface ExchangeRateService {
 
     Double getExchangeRate(String quote);
+
+//    Double transfer(Double amount);
 }
