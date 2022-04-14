@@ -4,6 +4,7 @@ import exchange.rate.eumus.Quote;
 import lombok.Data;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Getter
@@ -13,5 +14,5 @@ public class ExchangeResultDc {
     private int timestamp;
     private String source;
 //    private Quote quote;
-    private Map<String, Double> quotes;
+    private Map<String, BigDecimal> quotes;
 }

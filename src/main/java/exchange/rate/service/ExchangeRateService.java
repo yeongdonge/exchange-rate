@@ -2,9 +2,11 @@ package exchange.rate.service;
 
 import exchange.rate.dc.ExchangeResultDc;
 
+import java.math.BigDecimal;
+
 public interface ExchangeRateService {
 
-    Double getExchangeRate(String quote);
+    BigDecimal getExchangeRate(String quote);
 
 //    Double transfer(Double amount);
 }

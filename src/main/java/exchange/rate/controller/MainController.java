@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,15 +30,19 @@ public class MainController {
     @GetMapping("/quote")
     @ResponseBody
     public String calculateExchangeRate(@RequestParam String quote) {
-        Double exchangeRate = exchangeRateService.getExchangeRate(quote);
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(quote);
         log.info(exchangeRate.toString());
         return String.valueOf(exchangeRate);
     }
 
     @PostMapping("{quote}/{amount}")
     public String transferToQuote(@Valid @RequestBody ExchangeDc exchangeDc) {
-        Double exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
-        double result = exchangeRate * exchangeDc.getAmount();
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
+
+        BigDecimal amount = new BigDecimal(String.valueOf(exchangeDc.getAmount()));
+
+        BigDecimal result = exchangeRate.multiply(amount);
+
         System.out.println(exchangeRate);
         System.out.println(exchangeDc.getAmount());
         log.info(exchangeRate.toString());

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
@@ -19,11 +21,12 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public Double getExchangeRate(String quote) {
+    public BigDecimal getExchangeRate(String quote) {
         ExchangeResultDc exchangeResultDc = apiHandler.getApi();
         String rateQuote = source + quote;
-        Double aDouble = exchangeResultDc.getQuotes().get(rateQuote);
-        return aDouble;
+        BigDecimal result = new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
+
+        return result;
     }
 
 //    @Override

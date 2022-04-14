@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
 @Data
@@ -19,5 +20,5 @@ public class ExchangeDc {
 
     @Min(value = 0)
     @Max(value = 10000)
-    private double amount;
+    private BigDecimal amount;
 }
