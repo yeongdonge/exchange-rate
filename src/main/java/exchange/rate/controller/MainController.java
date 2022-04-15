@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public class MainController {
     private final ExchangeRateService exchangeRateService;
-    private final DecimalFormat df = new DecimalFormat("#,###.00");
+    private final DecimalFormat df = new DecimalFormat("#,##0.00");
 
 
 //    @GetMapping("")
@@ -33,6 +34,7 @@ public class MainController {
 
     @GetMapping("/quote")
     public String calculateExchangeRate(@RequestParam String quote) {
+        df.setRoundingMode(RoundingMode.DOWN);
         String exchangeRate = df.format(exchangeRateService.getExchangeRate(quote));
         log.info(exchangeRate);
         return exchangeRate;
@@ -40,7 +42,8 @@ public class MainController {
 
     @PostMapping("/quote")
     public String transferToQuote(@ModelAttribute ExchangeDc exchangeDc) {
-        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
+        df.setRoundingMode(RoundingMode.DOWN);
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote()).setScale(2, RoundingMode.FLOOR);
         BigDecimal amount = exchangeDc.getAmount();
         BigDecimal transferAmount = exchangeRate.multiply(amount);
         log.info(exchangeRate.toString());
