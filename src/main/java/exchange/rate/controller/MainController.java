@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 public class MainController {
     private final ExchangeRateService exchangeRateService;
-    private final DecimalFormat df = new DecimalFormat("#,##0.00");
+    private final DecimalFormat df = new DecimalFormat("#,###.00");
 
 
 //    @GetMapping("")
@@ -42,7 +42,9 @@ public class MainController {
     public String transferToQuote(@ModelAttribute ExchangeDc exchangeDc) {
         BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
         BigDecimal amount = exchangeDc.getAmount();
-        BigDecimal transferAmount = new BigDecimal(String.valueOf(exchangeRate)).multiply(amount);
+        BigDecimal transferAmount = exchangeRate.multiply(amount);
+        log.info(exchangeRate.toString());
+        log.info(amount.toString());
         return df.format(transferAmount);
     }
 
