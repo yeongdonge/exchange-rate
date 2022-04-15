@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     private final ApiHandler apiHandler;
-    private Source source;
+    private final Source source;
 
     public ExchangeRateServiceImpl(ApiHandler apiHandler) {
         this.apiHandler = apiHandler;
@@ -26,6 +29,10 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         String rateQuote = source + quote;
 
         return new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
+    }
+
+    public Map<String, Object> getInfo() {
+        return apiHandler.getInfo();
     }
 
 //    @Override

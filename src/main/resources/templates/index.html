@@ -12,18 +12,22 @@
         .col-form-label {
             max-width: 500px;
         }
+        #form-horizontal {
+            margin-top: 100px;
+            padding: 20px 20px 0;
+            border: 0;
+            outline: 0;
+        }
     </style>
 </head>
 <body>
 
 <h1>환율 계산</h1>
 
-<form action="index.html" id="trasfer">
+<form action="index.html" id="transfer" class="form-horizontal">
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">송금국가</label>
-        <div class="col-sm-10">
-            미국(USD)
-        </div>
+        <label for="amount" class="col-sm-2 col-form-label">미국</label>
     </div>
     <fieldset class="row mb-3">
         <legend class="col-form-label col-sm-2 pt-0">수취국가</legend>
@@ -52,18 +56,23 @@
         </div>
     </fieldset>
     <div class="row mb-3">
-        <label for="amount" class="col-sm-2 col-form-label">금액(USD)</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" name="amount" id="amount">
-        </div>
-    </div>
-    <div class="row mb-3">
         <label for="amount" class="col-sm-2 col-form-label">환율</label>
         <div class="col-sm-10">
             <span type="text" class="form-control" name="rate" id="rate" ></span>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="row mb-3">
+        <label for="amount" class="col-sm-2 col-form-label">금액(USD)</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="amount" id="amount">
+        </div>
+    </div>
+    <div>
+    <button type="button" class="btn btn-primary" onclick="transferToQuote()">Submit</button>
+    </div>
+    <div class="col-sm-10" id="form-horizontal">
+        <span type="text"  name="result" id="result" ></span>
+    </div>
 </form>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -76,6 +85,23 @@
             success: function (data) {
                 console.log(data);
                 $('#rate').text(data);
+            }
+        })
+    }
+
+    function transferToQuote() {
+        var quote = $('input[name=quote]:checked').val();
+        var amount = $('#amount').val();
+        $.ajax({
+            url: "/quote",
+            type: "POST",
+            data: {
+                quote: quote,
+                amount: amount
+            },
+            success: function (data) {
+                console.log(data);
+                $('#result').text("수취금액은 " + data + quote + " 입니다.")
             }
         })
     }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import exchange.rate.dc.ExchangeResultDc;
 import exchange.rate.eumus.Quote;
 import exchange.rate.eumus.Source;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,10 +16,12 @@ import org.json.simple.JSONObject;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
+@Getter
 public class ApiHandlerImpl implements ApiHandler {
     private final WebClient webClient;
     @Value("${custom.accessKey}")
@@ -62,11 +65,20 @@ public class ApiHandlerImpl implements ApiHandler {
         return exchangeResultDc;
     }
 
+    @Override
+    public Map<String, Object> getInfo() {
+        Map<String, Object> info = new HashMap<>();
+        info.put("supportedSource", supportedSource);
+        info.put("supportedQuote", supportedQuote);
+
+        return info;
+    }
+
     static StringBuffer covertListToString(List<?> list) {
         StringBuffer result = new StringBuffer();
 
         for(int i = 0; i < list.size(); ++i) {
-            if(i < list.size()-1) result.append(list.get(i)+",");
+            if(i < list.size()-1) result.append(list.get(i)).append(",");
             else result.append(list.get(i));
         }
         return result;
