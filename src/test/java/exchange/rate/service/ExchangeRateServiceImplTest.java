@@ -76,10 +76,7 @@ class ExchangeRateServiceImplTest {
                 .bodyToMono(String.class)
                 .block();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        ExchangeResultDc exchangeResultDc = objectMapper.readValue(response, ExchangeResultDc.class);
-        System.out.println("exchangeResultDc = " + exchangeResultDc);
+        System.out.println(response);
 
     }
     //then
