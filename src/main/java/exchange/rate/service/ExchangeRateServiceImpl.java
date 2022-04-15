@@ -24,9 +24,8 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     public BigDecimal getExchangeRate(String quote) {
         ExchangeResultDc exchangeResultDc = apiHandler.getApi();
         String rateQuote = source + quote;
-        BigDecimal result = new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
 
-        return result;
+        return new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
     }
 
 //    @Override

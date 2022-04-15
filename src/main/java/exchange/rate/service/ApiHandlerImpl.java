@@ -23,29 +23,33 @@ public class ApiHandlerImpl implements ApiHandler {
     private final WebClient webClient;
     @Value("${custom.accessKey}")
     private String accessKey;
-    private String url;
-    private List<Quote> supportedQuote;
-    private List<Source> supportedSource;
+    private final String url;
+    private final List<Quote> supportedQuote;
+    private final Source supportedSource;
 
     public ApiHandlerImpl(WebClient.Builder webClientBuilder) {
         this.url = "http://api.currencylayer.com/";
         this.webClient = webClientBuilder.baseUrl(url).build();
         supportedQuote = new ArrayList<>(List.of(Quote.KRW, Quote.PHP, Quote.JPY));
-        supportedSource = new ArrayList<>(List.of(Source.USD));
+        supportedSource = Source.USD;
     }
 
     @Override
     @JsonIgnoreProperties(ignoreUnknown = false)
     public ExchangeResultDc getApi() {
         ExchangeResultDc exchangeResultDc = null;
+        StringBuffer quotes = covertListToString(supportedQuote);
 
         String response = webClient.get()
-                .uri(url + "live?access_key={access_key}",
-                        Map.of("access_key", accessKey
+                .uri(url + "live?access_key={access_key}&currencies={currencies}&source={source}",
+                        Map.of("access_key", accessKey,
+                                "currencies", quotes,
+                                "source", supportedSource
                         ))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -56,5 +60,15 @@ public class ApiHandlerImpl implements ApiHandler {
         }
 
         return exchangeResultDc;
+    }
+
+    static StringBuffer covertListToString(List<?> list) {
+        StringBuffer result = new StringBuffer();
+
+        for(int i = 0; i < list.size(); ++i) {
+            if(i < list.size()-1) result.append(list.get(i)+",");
+            else result.append(list.get(i));
+        }
+        return result;
     }
 }
