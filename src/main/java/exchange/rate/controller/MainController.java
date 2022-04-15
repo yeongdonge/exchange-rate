@@ -13,42 +13,28 @@ import reactor.core.publisher.Flux;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.function.BiConsumer;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/")
 @Slf4j
 public class MainController {
     private final ExchangeRateService exchangeRateService;
 
-    @GetMapping()
-    public String index() {
-
-        return "index";
-    }
 
     @GetMapping("/quote")
-    @ResponseBody
-    public String calculateExchangeRate(@RequestParam String quote) {
+    public BigDecimal calculateExchangeRate(@RequestParam String quote) {
         BigDecimal exchangeRate = exchangeRateService.getExchangeRate(quote);
         log.info(exchangeRate.toString());
-        return String.valueOf(exchangeRate);
+        return exchangeRate;
     }
 
     @PostMapping("{quote}/{amount}")
-    public String transferToQuote(@Valid @RequestBody ExchangeDc exchangeDc) {
+    public BigDecimal transferToQuote(@Valid @RequestBody ExchangeDc exchangeDc) {
         BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
 
-        BigDecimal amount = new BigDecimal(String.valueOf(exchangeDc.getAmount()));
-
-        BigDecimal result = exchangeRate.multiply(amount);
-
-        System.out.println(exchangeRate);
-        System.out.println(exchangeDc.getAmount());
-        log.info(exchangeRate.toString());
-        log.info(String.valueOf(result));
-
-        return "ok";
+        return new BigDecimal(String.valueOf(exchangeRate.multiply(exchangeDc.getAmount())));
     }
 
 //    @GetMapping("{quote}")
