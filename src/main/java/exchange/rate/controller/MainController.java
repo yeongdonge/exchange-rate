@@ -17,20 +17,13 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/transfer")
 @Slf4j
 public class MainController {
     private final ExchangeRateService exchangeRateService;
     private final DecimalFormat df = new DecimalFormat("#,##0.00");
 
 
-//    @GetMapping("")
-//    public String index(Model model) {
-//        Map<String, Object> info = exchangeRateService.getInfo();
-//        List<Quote> quotes = new ArrayList<>(info.get("supportedQuote"));
-//
-//        return ""
-//    }
 
     @GetMapping("/quote")
     public String calculateExchangeRate(@RequestParam String quote) {
@@ -41,7 +34,7 @@ public class MainController {
     }
 
     @PostMapping("/quote")
-    public String transferToQuote(@ModelAttribute ExchangeDc exchangeDc) {
+    public String transferToQuote(ExchangeDc exchangeDc) {
         df.setRoundingMode(RoundingMode.DOWN);
         BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote()).setScale(2, RoundingMode.FLOOR);
         BigDecimal amount = exchangeDc.getAmount();
@@ -50,6 +43,7 @@ public class MainController {
         log.info(amount.toString());
         return df.format(transferAmount);
     }
+
 
 //    @GetMapping("{quote}")
 }

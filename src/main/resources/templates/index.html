@@ -24,7 +24,7 @@
 
 <h1>환율 계산</h1>
 
-<form action="index.html" id="transfer" class="form-horizontal">
+<form action="" method="post" id="transfer" class="form-horizontal" onsubmit="return false">
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">송금국가</label>
         <label for="amount" class="col-sm-2 col-form-label">미국</label>
@@ -80,7 +80,7 @@
     function getExchangeRate(quoteRadio) {
         var quote = quoteRadio.value;
         $.ajax({
-            url: "/quote?quote=" + quote,
+            url: "/transfer/quote?quote=" + quote,
             type: "GET",
             success: function (data) {
                 console.log(data);
@@ -92,8 +92,10 @@
     function transferToQuote() {
         var quote = $('input[name=quote]:checked').val();
         var amount = $('#amount').val();
+        console.log(quote)
+        console.log(amount)
         $.ajax({
-            url: "/quote",
+            url: "/transfer/quote",
             type: "POST",
             data: {
                 quote: quote,
@@ -110,7 +112,7 @@
     function initExchangeRate() {
         var quote = "KRW";
         $.ajax({
-            url: "/quote?quote=" + quote,
+            url: "/transfer/quote?quote=" + quote,
             type: "GET",
             success: function (data) {
                 console.log(data);

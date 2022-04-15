@@ -12,7 +12,7 @@ public class EtagHeaderFilter {
     public FilterRegistrationBean<ShallowEtagHeaderFilter> shallowEtagHeaderFilter() {
         FilterRegistrationBean<ShallowEtagHeaderFilter> registrationBean =
                 new FilterRegistrationBean<>(new ShallowEtagHeaderFilter());
-        registrationBean.addUrlPatterns("/quote/*");
+        registrationBean.addUrlPatterns("/*");
         registrationBean.setName("CurrencyAPIFilter");
         return registrationBean;
     }
