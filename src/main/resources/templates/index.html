@@ -97,14 +97,19 @@
         $.ajax({
             url: "/transfer/quote",
             type: "POST",
-            data: {
+            contentType: 'application/json',
+            data: JSON.stringify({
                 quote: quote,
                 amount: amount
-            },
+            }),
             success: function (data) {
                 console.log(data);
-                $('#result').text("수취금액은 " + data + quote + " 입니다.")
-            }
+                if(data === "error") {
+                    $('#result').text("송금액이 바르지 않습니다")
+                } else {
+                    $('#result').text("수취금액은 " + data + quote + " 입니다.")
+                }
+            },
         })
     }
 

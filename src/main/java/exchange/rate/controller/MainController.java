@@ -6,8 +6,10 @@ import exchange.rate.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -34,13 +36,16 @@ public class MainController {
     }
 
     @PostMapping("/quote")
-    public String transferToQuote(ExchangeDc exchangeDc) {
+    public String transferToQuote(@Valid @RequestBody ExchangeDc exchangeDc, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            System.out.println("valid 에러");
+            return "error";
+        }
+
         df.setRoundingMode(RoundingMode.DOWN);
         BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote()).setScale(2, RoundingMode.FLOOR);
-        BigDecimal amount = exchangeDc.getAmount();
-        BigDecimal transferAmount = exchangeRate.multiply(amount);
+        BigDecimal transferAmount = exchangeRate.multiply(exchangeDc.getAmount());
         log.info(exchangeRate.toString());
-        log.info(amount.toString());
         return df.format(transferAmount);
     }
 

@@ -1,13 +1,8 @@
 package exchange.rate.dc;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -15,10 +10,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ExchangeDc {
 
-    @NotNull
+    @NotBlank
     private String quote;
 
-    @Min(value = 0)
-    @Max(value = 10000)
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "10000")
     private BigDecimal amount;
 }
