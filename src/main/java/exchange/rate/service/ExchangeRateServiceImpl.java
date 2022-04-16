@@ -18,26 +18,26 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     private final ApiHandler apiHandler;
     private final Source source;
+    private final List<Quote> quotes;
+
 
     public ExchangeRateServiceImpl(ApiHandler apiHandler) {
         this.apiHandler = apiHandler;
-        this.source = Source.USD;
+        this.source = (Source) apiHandler.getInfo().get("supportedSource");
+        this.quotes = (List<Quote>) apiHandler.getInfo().get("supportedQuote");
     }
 
     @Override
     public BigDecimal getExchangeRate(String quote) {
         ExchangeResultDc exchangeResultDc = apiHandler.getApi();
-        String rateQuote = source + quote;
-
-        return new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
+        try {
+            if (quotes.contains(Quote.valueOf((quote)))) {
+                String rateQuote = source + quote;
+                return new BigDecimal(String.valueOf(exchangeResultDc.getQuotes().get(rateQuote)));
+            }
+        } catch (IllegalArgumentException e) {
+            return BigDecimal.valueOf(-1);
+        }
+        return BigDecimal.valueOf(-1);
     }
-
-    public Map<String, Object> getInfo() {
-        return apiHandler.getInfo();
-    }
-
-//    @Override
-//    public Double transfer(Double amount) {
-//
-//    }
 }

@@ -10,6 +10,4 @@ public interface ExchangeRateService {
 
     BigDecimal getExchangeRate(String quote);
 
-    Map<String, Object> getInfo();
-//    Double transfer(Double amount);
 }

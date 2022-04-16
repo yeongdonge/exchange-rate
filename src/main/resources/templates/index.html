@@ -12,6 +12,7 @@
         .col-form-label {
             max-width: 500px;
         }
+
         #form-horizontal {
             margin-top: 100px;
             padding: 20px 20px 0;
@@ -53,12 +54,19 @@
                     필리핀(PHP)
                 </label>
             </div>
+            <div class="form-check disabled">
+                <input class="form-check-input" type="radio" name="quote" id="YND" value="YND"
+                       onclick="getExchangeRate(this);">
+                <label class="form-check-label" for="YND">
+                    베트남(YND)
+                </label>
+            </div>
         </div>
     </fieldset>
     <div class="row mb-3">
         <label for="amount" class="col-sm-2 col-form-label">환율</label>
         <div class="col-sm-10">
-            <span type="text" class="form-control" name="rate" id="rate" ></span>
+            <span type="text" class="form-control" name="rate" id="rate"></span>
         </div>
     </div>
     <div class="row mb-3">
@@ -68,10 +76,10 @@
         </div>
     </div>
     <div>
-    <button type="button" class="btn btn-primary" onclick="transferToQuote()">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="transferToQuote()">Submit</button>
     </div>
     <div class="col-sm-10" id="form-horizontal">
-        <span type="text"  name="result" id="result" ></span>
+        <span type="text" name="result" id="result"></span>
     </div>
 </form>
 </body>
@@ -84,7 +92,16 @@
             type: "GET",
             success: function (data) {
                 console.log(data);
-                $('#rate').text(data);
+                if (data === "error") {
+                    $('#rate').text("지원하지 않는 국가입니다.").css("color", "red");
+                } else {
+                    $('#rate').text(data).css("color", "black");
+                }
+            },
+            error: function (data) {
+                if (data.status === 500) {
+                    $('#rate').text("너무 빠른 환율 갱신입니다, 다시 시도해주세요.").css("color", "red");
+                }
             }
         })
     }
@@ -93,9 +110,10 @@
         var checkAmount = /^[0-9]+$/;
         var quote = $('input[name=quote]:checked').val();
         var amount = $('#amount').val();
+        var errorHandle = -1.00;
         console.log(quote)
         console.log(amount)
-        if(checkAmount.test(amount)) {
+        if (checkAmount.test(amount)) {
             $.ajax({
                 url: "/transfer/quote",
                 type: "POST",
@@ -107,11 +125,16 @@
                 success: function (data) {
                     console.log(data);
                     if (data === "error") {
-                        $('#result').text("송금액이 바르지 않습니다").css("color", "red");
+                        if (data < errorHandle) $('#result').text("올바르지 않은 국가입니다.").css("color", "red");
+                        else $('#result').text("송금액이 바르지 않습니다").css("color", "red");
                     } else {
+                        console.log(data)
                         $('#result').text("수취금액은 " + data + quote + " 입니다.").css("color", "black");
                     }
                 },
+                error: function (data, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
             })
         } else {
             $('#result').text("송금액이 바르지 않습니다").css("color", "red");
@@ -127,10 +150,12 @@
             success: function (data) {
                 console.log(data);
                 $('#rate').text(data);
+            },
+            error: function (data, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         })
     }
-
 
     window.onload = initExchangeRate;
 </script>
