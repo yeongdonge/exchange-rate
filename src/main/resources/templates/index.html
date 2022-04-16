@@ -94,7 +94,7 @@
                 console.log(data);
                 if (data === "error") {
                     $('#rate').text("현재 지원하지 않는 국가입니다.").css("color", "red");
-                    $('#amount').attr("disabled", true);
+                    $('#amount').empty().attr("disabled", true)
                 } else {
                     $('#rate').text(data).css("color", "black");
                     $('#amount').attr("disabled", false);
