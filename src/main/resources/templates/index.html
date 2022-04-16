@@ -93,9 +93,11 @@
             success: function (data) {
                 console.log(data);
                 if (data === "error") {
-                    $('#rate').text("지원하지 않는 국가입니다.").css("color", "red");
+                    $('#rate').text("현재 지원하지 않는 국가입니다.").css("color", "red");
+                    $('#amount').attr("disabled", true);
                 } else {
                     $('#rate').text(data).css("color", "black");
+                    $('#amount').attr("disabled", false);
                 }
             },
             error: function (data) {
@@ -125,8 +127,7 @@
                 success: function (data) {
                     console.log(data);
                     if (data === "error") {
-                        if (data < errorHandle) $('#result').text("올바르지 않은 국가입니다.").css("color", "red");
-                        else $('#result').text("송금액이 바르지 않습니다").css("color", "red");
+                        $('#result').text("송금액이 바르지 않습니다").css("color", "red");
                     } else {
                         console.log(data)
                         $('#result').text("수취금액은 " + data + quote + " 입니다.").css("color", "black");
