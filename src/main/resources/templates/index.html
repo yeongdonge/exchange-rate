@@ -90,27 +90,32 @@
     }
 
     function transferToQuote() {
+        var checkAmount = /^[0-9]+$/;
         var quote = $('input[name=quote]:checked').val();
         var amount = $('#amount').val();
         console.log(quote)
         console.log(amount)
-        $.ajax({
-            url: "/transfer/quote",
-            type: "POST",
-            contentType: 'application/json',
-            data: JSON.stringify({
-                quote: quote,
-                amount: amount
-            }),
-            success: function (data) {
-                console.log(data);
-                if(data === "error") {
-                    $('#result').text("송금액이 바르지 않습니다").css("color", "red");
-                } else {
-                    $('#result').text("수취금액은 " + data + quote + " 입니다.").css("color", "black");
-                }
-            },
-        })
+        if(checkAmount.test(amount)) {
+            $.ajax({
+                url: "/transfer/quote",
+                type: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    quote: quote,
+                    amount: amount
+                }),
+                success: function (data) {
+                    console.log(data);
+                    if (data === "error") {
+                        $('#result').text("송금액이 바르지 않습니다").css("color", "red");
+                    } else {
+                        $('#result').text("수취금액은 " + data + quote + " 입니다.").css("color", "black");
+                    }
+                },
+            })
+        } else {
+            $('#result').text("송금액이 바르지 않습니다").css("color", "red");
+        }
     }
 
     // 환율 초기화면
