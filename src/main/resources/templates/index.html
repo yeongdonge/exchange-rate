@@ -105,9 +105,9 @@
             success: function (data) {
                 console.log(data);
                 if(data === "error") {
-                    $('#result').text("송금액이 바르지 않습니다")
+                    $('#result').text("송금액이 바르지 않습니다").css("color", "red");
                 } else {
-                    $('#result').text("수취금액은 " + data + quote + " 입니다.")
+                    $('#result').text("수취금액은 " + data + quote + " 입니다.").css("color", "black");
                 }
             },
         })
