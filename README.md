@@ -33,7 +33,7 @@
 
 <img width="643" alt="image" src="https://user-images.githubusercontent.com/72784474/163715810-33ab47a6-99b3-4151-b3d5-e19c2f9de7e5.png">
 
-### _비정상적인 호출 시, 500 에러를 반환하여 계산 기능을 Disabled 시켰습니다._
+### _비정상적인(너무 빠른) 호출 시, 500 에러를 반환하여 계산 기능을 Disabled 시켰습니다._
 ---
 
 <img width="643" alt="image" src="https://user-images.githubusercontent.com/72784474/163715884-82636eab-2d7a-4bcd-b49e-1225844492dd.png">
