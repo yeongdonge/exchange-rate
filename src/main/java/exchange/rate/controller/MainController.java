@@ -30,9 +30,9 @@ public class MainController {
     @GetMapping("/quote")
     public String calculateExchangeRate(@RequestParam String quote) {
         df.setRoundingMode(RoundingMode.DOWN);
-        BigDecimal rate = exchangeRateService.getExchangeRate(quote);
-        if(rate.equals(BigDecimal.valueOf(-1))) return "error";
-        return df.format(rate);
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(quote);
+        if(exchangeRate.equals(BigDecimal.valueOf(-1))) return "error";
+        return df.format(exchangeRate);
     }
 
     @PostMapping("/quote")
@@ -43,7 +43,9 @@ public class MainController {
         }
 
         df.setRoundingMode(RoundingMode.DOWN);
-        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote()).setScale(2, RoundingMode.FLOOR);
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate(exchangeDc.getQuote());
+        if(exchangeRate.equals(BigDecimal.valueOf(-1))) return "error";
+        exchangeRate = new BigDecimal(String.valueOf(exchangeRate)).setScale(2, RoundingMode.FLOOR);
         BigDecimal transferAmount = exchangeRate.multiply(exchangeDc.getAmount());
         log.info(exchangeRate.toString());
         return df.format(transferAmount);
