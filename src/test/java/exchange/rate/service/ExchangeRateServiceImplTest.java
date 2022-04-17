@@ -30,7 +30,7 @@ class ExchangeRateServiceImplTest {
      * http://api.currencylayer.com/live?access_key=85c7c9db50eb0375d0cc55ab69e44908&source=USD&currencies=KRW,JPY,PHP&format=1
      */
     @Test
-    @DisplayName("환율 API 호출 테스트")
+    @DisplayName("환율 API 호출 기본 테스트")
     void API_호출() throws Exception {
         //given
         WebClient webClient = WebClient.create("http://api.currencylayer.com");
@@ -56,29 +56,4 @@ class ExchangeRateServiceImplTest {
         assertThat(source).isEqualTo("USD");
         assertThat(quote).isGreaterThan("1200");
     }
-
-    /**
-     * API 호출 테스트 2
-     */
-    @Test
-    @DisplayName("API 호출 테스트 2")
-    void test() throws Exception {
-        WebClient webClient = WebClient.create("http://api.currencylayer.com");
-        String url = "http://api.currencylayer.com/";
-        String accessKey = "85c7c9db50eb0375d0cc55ab69e44908";
-
-        //when
-        String response = webClient.get()
-                .uri(url + "live?access_key={access_key}",
-                        Map.of("access_key", accessKey
-                        ))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        System.out.println(response);
-
-    }
-    //then
-
 }

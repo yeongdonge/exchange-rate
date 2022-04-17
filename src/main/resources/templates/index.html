@@ -97,7 +97,7 @@
                     $('#amount').attr("disabled", true);
                     $('#submit').attr("disabled", true);
                 } else {
-                    $('#rate').text(data).css("color", "black");
+                    $('#rate').text(data + " " + quote).css("color", "black");
                     $('#amount').attr("disabled", false);
                     $('#submit').attr("disabled", false);
                 }
@@ -105,6 +105,8 @@
             error: function (data) {
                 if (data.status === 500) {
                     $('#rate').text("너무 빠른 환율 갱신입니다, 다시 시도해주세요.").css("color", "red");
+                    $('#amount').attr("disabled", true);
+                    $('#submit').attr("disabled", true);
                 }
             }
         })
@@ -152,10 +154,10 @@
             type: "GET",
             success: function (data) {
                 console.log(data);
-                $('#rate').text(data);
+                $('#rate').text(data + " " + quote);
             },
             error: function (data, status, error) {
-                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                alert("code:" + data.status + "\n" + "message:" + data.responseText + "\n" + "error:" + error);
             }
         })
     }

@@ -38,7 +38,7 @@ public class MainController {
     @PostMapping("/quote")
     public String transferToQuote(@Valid @RequestBody ExchangeDc exchangeDc, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            System.out.println("valid 에러");
+            log.info("valid error");
             return "error";
         }
 
