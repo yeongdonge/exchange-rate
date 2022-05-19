@@ -44,6 +44,7 @@
 ### _서비스에서 지원하지 않는 국가 선택 시, 계산 기능을 Disabled 시켰습니다._
 ---
 
+
 <img width="643" alt="image" src="https://user-images.githubusercontent.com/72784474/163716633-f5f6afcb-8210-4cdb-83df-59ca2ad4f976.png">
 
 ### _숫자 외 다른 값 입력 시, 송금액이 올바르지 않음을 출력했습니다._
